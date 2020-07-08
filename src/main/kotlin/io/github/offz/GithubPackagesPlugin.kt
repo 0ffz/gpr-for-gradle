@@ -27,7 +27,6 @@ class GithubPackagesPlugin : Plugin<Project> {
 /** The template applied to all packages when created. Modified by [githubPackages]. */
 private var packageTemplate: MavenArtifactRepository.(name: String) -> Unit = {
     credentials {
-        println("adding $name with $username and $password")
         username = githubUsername
         password = githubPassword
     }
@@ -64,8 +63,7 @@ fun RepositoryHandler.githubPackage(name: String, init: MavenArtifactRepository.
         this.name = name
         this.packageTemplate(name)
         this.init()
-        println("hello with ${credentials.username} and ${credentials.password}!")
-    }.also { println("adding package! $name") }
+    }
 
 /**
  * Modifies the default template used for packages. Example to change credentials:
