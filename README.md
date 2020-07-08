@@ -1,6 +1,8 @@
-# gpr-for-gradle (Gradle Github Packages Plugin)
+# gpr-for-gradle (Gradle Github Packages Plugin) 
 
-Currently this only supports the Gradle Kotlin-DSL. Here's a [Groovy alternative](https://github.com/jarnoharno/gradle-github-packages-plugin).
+[![Gradle Plugin Portal](https://badgen.net/maven/v/metadata-url/https/plugins.gradle.org/m2/io/github/0ffz/github-packages/io.github.0ffz.github-packages.gradle.plugin/maven-metadata.xml?label=gradlePluginPortal)](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages)
+
+Currently this only supports the Gradle Kotlin-DSL. Here's a [Groovy alternative](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages).
 
 Have you ever tried to use GitHub Packages for your Java project, just to be disappointed by the fact that there isn't a public repo and everything requires credentials? Are disgusted by the idea of adding more than one line of code per repository to your build.gradle? 
 
@@ -10,15 +12,37 @@ You'll still need to [generate a personal access token](https://docs.github.com/
 
 ### Add the plugin
 
-(Not published yet)
 
 Using the plugins DSL:
 
 ```kotlin
 plugins {
-    id("io.github.0ffz.github-packages") version "x.x.x"
+    id("io.github.0ffz.github-packages") version "1.x.x"
 }
 ```
+
+<details>
+<summary>Using legacy plugin application: </summary>
+<p>
+
+```kotlin
+buildscript {
+  repositories {
+    maven {
+      url = uri("https://plugins.gradle.org/m2/")
+    }
+  }
+  dependencies {
+    classpath("gradle.plugin.io.github.0ffz:gpr-for-gradle:1.x.x")
+  }
+}
+
+apply(plugin = "io.github.0ffz.github-packages")
+```
+</p>
+</details>
+
+[You may find it on Gradle's plugin plugin portal](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages) 
 
 ### Simple use case
 
