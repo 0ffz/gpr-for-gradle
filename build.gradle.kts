@@ -16,15 +16,17 @@ kotlinDslPluginOptions {
 }
 
 pluginBundle {
-    vcsUrl = "https://github.com/0ffz/gpr-for-gradle"
+    website = "https://github.com/0ffz/gpr-for-gradle"
+    vcsUrl = "https://github.com/0ffz/gpr-for-gradle.git"
     tags = listOf("github", "github-packages", "dependency", "maven", "repository")
 }
 
 gradlePlugin {
     plugins {
         register("github-packages") {
+            displayName = "GitHub Packages for gradle"
             id = "io.github.0ffz.github-packages"
-            implementationClass = "io.github.0ffz.GithubPackagesPlugin"
+            implementationClass = "io.github.offz.GithubPackagesPlugin"
             description = "Cleanly add Github Packages maven repos with credentials in global gradle.properties or env variable (for Github Actions)"
         }
     }
