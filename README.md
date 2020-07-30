@@ -2,11 +2,11 @@
 
 [![Gradle Plugin Portal](https://badgen.net/maven/v/metadata-url/https/plugins.gradle.org/m2/io/github/0ffz/github-packages/io.github.0ffz.github-packages.gradle.plugin/maven-metadata.xml?label=gradlePluginPortal)](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages)
 
-Currently this only supports the Gradle Kotlin-DSL. Here's a [Groovy alternative](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages).
+This project is aimed at the Gradle Kotlin-DSL but very basic support is present [for Groovy](#Groovy). Consider this [Groovy alternative](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages) as well.   
 
-Have you ever tried to use GitHub Packages for your Java project, just to be disappointed by the fact that there isn't a public repo and everything requires credentials? Are disgusted by the idea of adding more than one line of code per repository to your build.gradle? 
+Have you ever tried to use GitHub Packages for your Java project, just to realize there isn't a public maven repo and everything requires credentials? Do you hate adding more than one line of code per repository to your build.gradle? Then this project is for you.
 
-You'll still need to [generate a personal access token](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages), but at least now your build.gradle will look clean!
+You'll still need to [generate a personal access token](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages), but at least now your build.gradle can look clean!
 
 ## Usage
 
@@ -89,6 +89,19 @@ repositories {
 }
 ```
 
+### Groovy
+
+Within Groovy, you may add a package as follows: 
+
+```groovy
+repositories {
+    maven githubPackage.invoke("MineInAbyss/guiy")
+}
+```
+
+There is currently no support for customizing the username, token, etc... within Groovy.
+
 # Plans
 
 - Make extension functions work nicely with Groovy (feel free to open a PR for it)
+- Archive this project if Github Packages improve support for maven

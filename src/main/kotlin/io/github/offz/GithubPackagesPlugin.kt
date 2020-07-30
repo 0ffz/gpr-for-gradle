@@ -1,9 +1,11 @@
 package io.github.offz
 
+import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+import org.gradle.kotlin.dsl.typeOf
 import java.net.URI
 
 private lateinit var githubUsername: String
@@ -14,14 +16,22 @@ class GithubPackagesPlugin : Plugin<Project> {
         githubUsername = (properties["gpr.user"] ?: System.getenv("GITHUB_ACTOR")).toString()
         githubPassword = (properties["gpr.key"] ?: System.getenv("GITHUB_TOKEN")).toString()
 
-        //TODO no idea how to get this to work with Groovy
-        /*extensions.add(
-            typeOf<RepositoryHandler.(name: String) -> Unit>(),
-            "io.github.offz.githubPackage"
-        ) {
-            io.github.offz.githubPackage(name)
-        }*/
+        //TODO allow for configuring the action further (do they use Closures for this in groovy?)
+        extensions.add(
+            typeOf<(name: String) -> Action<MavenArtifactRepository>>(),
+            "githubPackage"
+        ) { name ->
+            Action {
+                applyBaseTemplate(name)
+            }
+        }
     }
+}
+
+private fun MavenArtifactRepository.applyBaseTemplate(name: String) {
+    url = URI("https://maven.pkg.github.com/$name")
+    this.name = name.replace('/', '-')
+    this.packageTemplate(name)
 }
 
 /** The template applied to all packages when created. Modified by [githubPackages]. */
@@ -59,9 +69,7 @@ private var packageTemplate: MavenArtifactRepository.(name: String) -> Unit = {
  */
 fun RepositoryHandler.githubPackage(name: String, init: MavenArtifactRepository.() -> Unit = {}) =
     maven() {
-        url = URI("https://maven.pkg.github.com/$name")
-        this.name = name
-        this.packageTemplate(name)
+        applyBaseTemplate(name)
         this.init()
     }
 

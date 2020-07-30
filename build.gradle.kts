@@ -1,11 +1,11 @@
 plugins {
     `kotlin-dsl`
     id("com.gradle.plugin-publish") version "0.12.0"
-//    `maven-publish`
+    `maven-publish`
 }
 
 group = "io.github.0ffz"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     jcenter()
