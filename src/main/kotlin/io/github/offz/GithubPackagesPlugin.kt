@@ -7,14 +7,15 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.kotlin.dsl.typeOf
 import java.net.URI
+import java.nio.file.Paths
 
 private lateinit var githubUsername: String
 private lateinit var githubPassword: String
 
 class GithubPackagesPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
-        githubUsername = (properties["gpr.user"] ?: System.getenv("GITHUB_ACTOR")).toString()
-        githubPassword = (properties["gpr.key"] ?: System.getenv("GITHUB_TOKEN")).toString()
+        githubUsername = (properties["gpr.user"] ?: System.getenv("GITHUB_ACTOR") ?: sendInstructions()).toString()
+        githubPassword = (properties["gpr.key"] ?: System.getenv("GITHUB_TOKEN") ?: sendInstructions()).toString()
 
         //TODO allow for configuring the action further (do they use Closures for this in groovy?)
         extensions.add(
@@ -26,6 +27,15 @@ class GithubPackagesPlugin : Plugin<Project> {
             }
         }
     }
+}
+
+private fun sendInstructions(): Nothing {
+    error(
+        """You must specify gpr.user and gpr.key properties in your global gradle properties file.
+            See https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages
+            The file is at ${Paths.get(System.getProperty("user.home"), ".gradle/gradle.properties")}        
+        """.trimIndent()
+    )
 }
 
 private fun MavenArtifactRepository.applyBaseTemplate(name: String) {
