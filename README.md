@@ -95,7 +95,7 @@ Within Groovy, you may add a package as follows:
 
 ```groovy
 repositories {
-    maven githubPackage.invoke("MineInAbyss/guiy")
+    maven githubPackage.invoke("owner/repo")
 }
 ```
 
