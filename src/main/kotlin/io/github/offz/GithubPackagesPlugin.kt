@@ -12,8 +12,12 @@ import java.nio.file.Paths
 
 private lateinit var currentProject: Project
 
-private val githubUsername: String by lazy { (currentProject.properties["gpr.user"] ?: System.getenv("GITHUB_ACTOR") ?: sendInstructions()).toString() }
-private val githubPassword: String by lazy { (currentProject.properties["gpr.key"] ?: System.getenv("GITHUB_TOKEN") ?: sendInstructions()).toString() }
+private val githubUsername: String? by lazy {
+    currentProject.properties["gpr.user"]?.toString() ?: System.getenv("GITHUB_ACTOR")
+}
+private val githubPassword: String? by lazy {
+    currentProject.properties["gpr.key"]?.toString() ?: System.getenv("GITHUB_TOKEN")
+}
 
 class GithubPackagesPlugin : Plugin<Project> {
     override fun apply(project: Project): Unit = project.run {
@@ -23,9 +27,13 @@ class GithubPackagesPlugin : Plugin<Project> {
             typeOf<(name: String) -> Action<MavenArtifactRepository>>(),
             "githubPackage"
         ) { name ->
-            Action {
-                applyBaseTemplate(name)
-            }
+            Action { applyBaseTemplate(name) }
+        }
+        extensions.add(
+            typeOf<(name: String) -> Action<MavenArtifactRepository>>(),
+            "githubPackagePublish"
+        ) { name ->
+            Action { applyBaseTemplate(name, verifyCredentialsSet = false) }
         }
     }
 }
@@ -37,9 +45,13 @@ private fun sendInstructions(): Nothing = error(
     """.trimIndent()
 )
 
-private fun MavenArtifactRepository.applyBaseTemplate(name: String) {
+private fun MavenArtifactRepository.applyBaseTemplate(name: String, verifyCredentialsSet: Boolean = true) {
     url = URI("https://maven.pkg.github.com/$name")
     this.name = name.replace('/', '-')
+    if (verifyCredentialsSet) {
+        githubUsername ?: sendInstructions()
+        githubPassword ?: sendInstructions()
+    }
     this.packageTemplate(name)
 }
 
@@ -73,12 +85,18 @@ private var packageTemplate: MavenArtifactRepository.(name: String) -> Unit = {
  * }
  * ```
  *
+ * @param verifyCredentialsSet Whether to send an error message if credentials are not set.
+ *
  * These changes will only be applied to the current package, while [githubPackages] would apply them to all
  * the following packages.
  */
-fun RepositoryHandler.githubPackage(name: String, init: MavenArtifactRepository.() -> Unit = {}) =
+fun RepositoryHandler.githubPackage(
+    name: String,
+    verifyCredentialsSet: Boolean = true,
+    init: MavenArtifactRepository.() -> Unit = {}
+) =
     maven() {
-        applyBaseTemplate(name)
+        applyBaseTemplate(name, verifyCredentialsSet)
         this.init()
     }
 
