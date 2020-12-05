@@ -1,17 +1,17 @@
 # gpr-for-gradle (Gradle Github Packages Plugin) 
 
-[![Gradle Plugin Portal](https://badgen.net/maven/v/metadata-url/https/plugins.gradle.org/m2/io/github/0ffz/github-packages/io.github.0ffz.github-packages.gradle.plugin/maven-metadata.xml?label=gradlePluginPortal)](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages)
+[![Gradle Plugin Portal](https://badgen.net/maven/v/metadata-url/https/plugins.gradle.org/m2/io/github/0ffz/github-packages/io.github.0ffz.github-packages.gradle.plugin/maven-metadata.xml?label=gradlePluginPortal)](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages)  
 
-This project is aimed at the Gradle Kotlin-DSL but very basic support is present [for Groovy](#Groovy). Consider this [Groovy alternative](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages) as well.   
+GitHub Packages introduced features for hosting Maven packages for free, but these require credentials even for public ones.
 
-Have you ever tried to use GitHub Packages for your Java project, just to realize there isn't a public maven repo and everything requires credentials? Do you hate adding more than one line of code per repository to your build.gradle? Then this project is for you.
+This project helps keep your gradle project cleaner when adding GitHub Packages, and gives simple instructions for users to set up a personal access token to read packages. 
+It will also automatically add these permissions when running your build in a GitHub Workflow.
 
-You'll still need to [generate a personal access token](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages), but at least now your build.gradle can look clean!
+This project is aimed at the Gradle Kotlin-DSL but basic support is present [for Groovy](#Groovy). Consider this [Groovy alternative](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages) as well.
 
 ## Usage
 
 ### Add the plugin
-
 
 Using the plugins DSL:
 
@@ -99,7 +99,7 @@ repositories {
 }
 ```
 
-There is currently no support for customizing the username, token, etc... within Groovy.
+There is currently no support for customizing the username, token, etc... within Groovy, but works well if you just need to add public packages.
 
 # Plans
 

@@ -39,9 +39,17 @@ class GithubPackagesPlugin : Plugin<Project> {
 }
 
 private fun sendInstructions(): Nothing = error(
-    """You must specify gpr.user and gpr.key properties in your global gradle properties file.
-        See https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages
-        The file is at ${Paths.get(System.getProperty("user.home"), ".gradle/gradle.properties")}        
+    """
+        GITHUB PACKAGE READ PERMISSIONS MISSING
+        1. Generate a token at 
+            https://github.com/settings/tokens/new?scopes=read:packages&description=GPR%20for%20Gradle
+        2. Open your global gradle.properties file at
+            ${Paths.get(System.getProperty("user.home"), ".gradle/gradle.properties")}
+        3. Add username and token:
+            gpr.user=<GITHUB NAME>
+            gpr.key=<GENERATED TOKEN>
+        4. You may need to restart your IDE
+        For more info see https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages
     """.trimIndent()
 )
 
