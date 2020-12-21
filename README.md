@@ -102,7 +102,7 @@ It appears sharing a PAT is currently the encouraged solution, as seen by [this 
 ### Manual token setup
 
 1. Generate a token at https://github.com/settings/tokens/new?scopes=read:packages&description=GPR%20for%20Gradle
-2. Open your global gradle.properties file at `~./gradle/gradle.properties`
+2. Open your global gradle.properties file at `~/.gradle/gradle.properties`
 3. Add username and token:
     ```ini
     gpr.user=<GITHUB NAME>
