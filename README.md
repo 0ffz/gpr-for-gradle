@@ -4,10 +4,7 @@
 
 GitHub Packages introduced features for hosting Maven packages for free, but these require credentials even for public ones.
 
-This project helps keep your gradle project cleaner when adding GitHub Packages, and gives simple instructions for users to set up a personal access token to read packages. 
-It will also automatically add these permissions when running your build in a GitHub Workflow.
-
-This project is aimed at the Gradle Kotlin-DSL but basic support is present [for Groovy](#Groovy). Consider this [Groovy alternative](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages) as well.
+This grade plugin allows you to add a maven repository from GitHub Packages in one line. It also comes with a default personal access token, allowing the use of public repositories without any extra setup (see [Notes on automatic authentication](#notes-on-automatic-authentication)).
 
 ## Usage
 
@@ -44,11 +41,20 @@ apply(plugin = "io.github.0ffz.github-packages")
 
 [You may find it on Gradle's plugin plugin portal](https://plugins.gradle.org/plugin/io.github.0ffz.github-packages) 
 
-### Simple use case
 
-Add your `gpr.user` and `gpr.key` to your global gradle.properties (as described in GitHub's guide)
+### Groovy
 
-Everything automatically works for github actions' `GITHUB_ACTOR` and `GITHUB_TOKEN`, unless manually changing the username and password.
+Within Groovy, you may add a package repository as follows: 
+
+```groovy
+repositories {
+    maven githubPackage.invoke("owner/repo")
+}
+```
+
+There is currently no support for further customization in Groovy.
+
+### Kotlin
 
 Add the GitHub repo to the repositories block:
 
@@ -58,7 +64,7 @@ repositories {
 }
 ```
 
-### Modifying default username/key
+#### Modifying default username/key
 
 Use the `githubPackages` blocks above `repositories` to edit the template applied to every package below. Example to change credentials of every repo:
 
@@ -89,17 +95,24 @@ repositories {
 }
 ```
 
-### Groovy
+## Notes on automatic authentication
 
-Within Groovy, you may add a package as follows: 
+It appears sharing a PAT is currently the encouraged solution, as seen by [this post](https://github.community/t/download-from-github-package-registry-without-authentication/14407/38) from a staff member on the GitHub community forms. In a worst case scenario, the plugin will send a detailed message explaining exactly how to set up a token.
 
-```groovy
-repositories {
-    maven githubPackage.invoke("owner/repo")
-}
-```
+### Manual token setup
 
-There is currently no support for customizing the username, token, etc... within Groovy, but works well if you just need to add public packages.
+1. Generate a token at https://github.com/settings/tokens/new?scopes=read:packages&description=GPR%20for%20Gradle
+2. Open your global gradle.properties file at `~./gradle/gradle.properties`
+3. Add username and token:
+    ```ini
+    gpr.user=<GITHUB NAME>
+    gpr.key=<GENERATED TOKEN>
+   ```
+4. You may need to restart your IDE
+
+For more info see this [GitHub docs](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages#authenticating-to-github-packages) page.
+
+`GITHUB_ACTOR` and `GITHUB_TOKEN` will be used within GitHub workflows, unless the username and password are manually changed.
 
 # Plans
 
