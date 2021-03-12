@@ -49,6 +49,8 @@ Within Groovy, you may add a package repository as follows:
 ```groovy
 repositories {
     maven githubPackage.invoke("owner/repo")
+   // Or for all packages under the owner/org
+    maven githubPackage.invoke("owner")
 }
 ```
 
@@ -61,6 +63,8 @@ Add the GitHub repo to the repositories block:
 ```kotlin
 repositories {
     githubPackage("owner/repo")
+    // Or for all packages under the owner/org
+    githubPackage("owner")
 }
 ```
 

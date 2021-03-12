@@ -54,7 +54,7 @@ private fun sendInstructions(): Nothing = error(
 )
 
 private fun MavenArtifactRepository.applyBaseTemplate(name: String) {
-    url = URI("https://maven.pkg.github.com/$name")
+    url = URI("https://maven.pkg.github.com/$name${if ('/' !in name) "/*" else ""}")
     this.name = name.replace('/', '-')
 
     //TODO try to find a more specific exception for failing to authenticate with maven
